@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard – FitBuddy All Users & Workout Plans</title>
+  <meta name="description" content="Admin dashboard to monitor all registered users, compare original and updated workout plans.">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+  <!-- Ambient Gym Background Overlay -->
+  <div class="bg-overlay"></div>
+
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar">
+      <a href="/" class="brand">
+        <span class="brand-icon">⚡</span>
+        <span class="brand-name">FitBuddy AI</span>
+        <span class="brand-badge">Trainer Dashboard</span>
+      </a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">New Workout Plan</a>
+        <a href="/view-all-users" class="nav-link active">Admin Dashboard</a>
+        <a href="/docs" target="_blank" class="nav-link">API Docs</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container-wide">
+    <div class="card">
+      <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; text-align: left;">
+        <div>
+          <h1 class="card-title" style="justify-content: flex-start;">
+            <span>📋</span> FitBuddy - All Users &amp; Workout Plans
+          </h1>
+          <p class="card-subtitle">
+            Database overview of registered fitness profiles, original generated routines, and user feedback revisions
+          </p>
+        </div>
+        <div>
+          <a href="/" class="btn" style="width: auto; padding: 0.65rem 1.25rem; font-size: 0.95rem;">
+            <span>➕</span> Generate New Plan
+          </a>
+        </div>
+      </div>
+
+      {% if users and users|length > 0 %}
+      <div class="table-responsive">
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th style="width: 70px;">User ID</th>
+              <th style="width: 130px;">Name</th>
+              <th style="width: 65px;">Age</th>
+              <th style="width: 90px;">Weight (kg)</th>
+              <th style="width: 140px;">Goal</th>
+              <th style="width: 95px;">Intensity</th>
+              <th style="min-width: 320px;">Original Plan</th>
+              <th style="min-width: 320px;">Updated Plan</th>
+              <th style="width: 80px;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+            <tr>
+              <td><strong>#{{ user.id }}</strong></td>
+              <td><strong>{{ user.name }}</strong></td>
+              <td>{{ user.age }}</td>
+              <td>{{ user.weight }}</td>
+              <td><span style="font-weight: 600; color: #1e40af;">{{ user.goal }}</span></td>
+              <td>
+                {% if user.intensity|lower == 'high' %}
+                  <span class="badge-tag badge-high">High</span>
+                {% elif user.intensity|lower == 'medium' %}
+                  <span class="badge-tag badge-medium">Medium</span>
+                {% else %}
+                  <span class="badge-tag badge-low">Low</span>
+                {% endif %}
+              </td>
+              <td>
+                <pre>{{ user.original_plan }}</pre>
+              </td>
+              <td>
+                {% if user.updated_plan and user.updated_plan != 'Not updated' %}
+                  <span style="display: inline-block; font-size: 0.75rem; color: #047857; font-weight: 700; margin-bottom: 0.35rem;">
+                    UPDATED REVISION
+                  </span>
+                  <pre style="border-left: 3px solid #10b981; background: #f0fdf4;">{{ user.updated_plan }}</pre>
+                {% else %}
+                  <span style="color: #94a3b8; font-style: italic; font-size: 0.85rem;">Not updated yet</span>
+                {% endif %}
+              </td>
+              <td>
+                <form action="/delete-user/{{ user.id }}" method="POST" onsubmit="return confirm('Delete user #{{ user.id }} ({{ user.name }}) and workout plan?');">
+                  <button type="submit" class="btn btn-danger" title="Delete User">
+                    🗑️ Delete
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div style="text-align: center; padding: 3rem 1rem;">
+        <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🏃💨</span>
+        <h3 style="font-size: 1.3rem; color: #334155; margin-bottom: 0.5rem;">No user plans generated yet</h3>
+        <p style="color: #64748b; margin-bottom: 1.5rem;">Start by generating your first 7-day personalized workout plan.</p>
+        <a href="/" class="btn" style="max-width: 280px; margin: 0 auto;">Generate First Plan</a>
+      </div>
+      {% endif %}
+    </div>
+  </main>
+
+  <footer>
+    <p>FitBuddy AI &bull; SQLite Persistence via SQLAlchemy ORM &bull; FastAPI Backend</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitBuddy – AI Workout Generator</title>
+  <meta name="description" content="AI-driven personalized 7-day fitness and workout plan generator powered by Google Gemini models.">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+  <!-- Ambient Gym Background Overlay -->
+  <div class="bg-overlay"></div>
+
+  <!-- Top Navigation Bar -->
+  <header>
+    <nav class="navbar">
+      <a href="/" class="brand">
+        <span class="brand-icon">⚡</span>
+        <span class="brand-name">FitBuddy AI</span>
+        <span class="brand-badge">Gemini Powered</span>
+      </a>
+      <div class="nav-links">
+        <a href="/" class="nav-link active">Home</a>
+        <a href="/view-all-users" class="nav-link">Admin Dashboard</a>
+        <a href="/docs" target="_blank" class="nav-link">API Docs</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="card">
+      <div class="card-header">
+        <h1 class="card-title">
+          <span>🏋️‍♂️</span> FitBuddy - AI Workout Generator
+        </h1>
+        <p class="card-subtitle">
+          Personalized 7-day workout schedules and targeted nutrition tips powered by Google Gemini AI
+        </p>
+      </div>
+
+      <!-- Main Input Form -->
+      <form id="workoutForm" action="/generate-workout" method="POST">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="username" class="form-label">Full Name</label>
+            <input 
+              type="text" 
+              id="username" 
+              name="username" 
+              class="form-control" 
+              placeholder="e.g. Alex Johnson" 
+              required 
+              autocomplete="name"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="user_id" class="form-label">Unique User ID (Number)</label>
+            <input 
+              type="number" 
+              id="user_id" 
+              name="user_id" 
+              class="form-control" 
+              placeholder="e.g. 101" 
+              required
+              min="1"
+            >
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="age" class="form-label">Age (years)</label>
+            <input 
+              type="number" 
+              id="age" 
+              name="age" 
+              class="form-control" 
+              placeholder="e.g. 24" 
+              required 
+              min="12" 
+              max="100"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="weight" class="form-label">Weight (kg)</label>
+            <input 
+              type="number" 
+              step="0.1" 
+              id="weight" 
+              name="weight" 
+              class="form-control" 
+              placeholder="e.g. 72.5" 
+              required 
+              min="30" 
+              max="250"
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="goal" class="form-label">Fitness Goal</label>
+          <input 
+            type="text" 
+            id="goal" 
+            name="goal" 
+            class="form-control" 
+            placeholder="e.g. weight loss, build muscle, marathon endurance, flexibility" 
+            required
+            list="goal-suggestions"
+          >
+          <datalist id="goal-suggestions">
+            <option value="Weight Loss & Fat Reduction">
+            <option value="Muscle Gain & Hypertrophy">
+            <option value="Strength & Powerbuilding">
+            <option value="Cardio Conditioning & Stamina">
+            <option value="Flexibility, Mobility & Core">
+            <option value="General Health & Wellness">
+          </datalist>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Preferred Workout Intensity</label>
+          <div class="intensity-grid">
+            <div class="intensity-pill">
+              <input type="radio" id="intensity-low" name="intensity" value="Low">
+              <label for="intensity-low" class="intensity-label">🟢 Low</label>
+            </div>
+            <div class="intensity-pill">
+              <input type="radio" id="intensity-medium" name="intensity" value="Medium" checked>
+              <label for="intensity-medium" class="intensity-label">🟡 Medium</label>
+            </div>
+            <div class="intensity-pill">
+              <input type="radio" id="intensity-high" name="intensity" value="High">
+              <label for="intensity-high" class="intensity-label">🔴 High</label>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem;">
+          <button type="submit" id="submitBtn" class="btn">
+            <span id="btnIcon">⚡</span>
+            <span id="btnText">Generate Plan</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <p>FitBuddy AI &bull; Intelligent Fitness Planning with Google Gemini &bull; <a href="/view-all-users">Trainer Dashboard</a></p>
+  </footer>
+
+  <script>
+    const form = document.getElementById('workoutForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const btnIcon = document.getElementById('btnIcon');
+
+    form.addEventListener('submit', function() {
+      btnText.textContent = 'Generating 7-Day Fitness Plan with Gemini...';
+      btnIcon.textContent = '⏳';
+      submitBtn.style.opacity = '0.85';
+      submitBtn.style.pointerEvents = 'none';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+"""
+FitBuddy AI Package
+"""

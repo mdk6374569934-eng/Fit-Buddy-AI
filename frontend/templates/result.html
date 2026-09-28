@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Personalized Workout Plan – FitBuddy AI</title>
+  <meta name="description" content="View your AI-generated 7-day personalized workout plan and nutrition guidance.">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+  <!-- Gym Ambient Background -->
+  <div class="bg-overlay"></div>
+
+  <!-- Navigation -->
+  <header>
+    <nav class="navbar">
+      <a href="/" class="brand">
+        <span class="brand-icon">⚡</span>
+        <span class="brand-name">FitBuddy AI</span>
+        <span class="brand-badge">Gemini Powered</span>
+      </a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">New Plan</a>
+        <a href="/view-all-users" class="nav-link">Admin Dashboard</a>
+        <a href="/docs" target="_blank" class="nav-link">API Docs</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    {% if confirmation_message %}
+    <!-- Confirmation Alert when Plan is Updated via Feedback -->
+    <div class="alert-success" role="alert">
+      <span style="font-size: 1.4rem;">✅</span>
+      <div>
+        <strong>Success!</strong> {{ confirmation_message }}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="card">
+      <div class="card-header">
+        <h1 class="card-title">
+          <span>🏋️</span> Your Personalized Workout Plan
+        </h1>
+        <p class="card-subtitle">AI-crafted 7-day routine tailored specifically to your physiology and targets</p>
+      </div>
+
+      <!-- User Information Section (PDF Page 19) -->
+      <section style="margin-bottom: 2rem;">
+        <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 0.75rem;">
+          User Information
+        </h2>
+        <div class="user-info-grid">
+          <div class="info-item">
+            <span class="info-label">Name</span>
+            <span class="info-value">{{ username }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">User ID</span>
+            <span class="info-value">#{{ user_id }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Age</span>
+            <span class="info-value">{{ age }} yrs</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Weight</span>
+            <span class="info-value">{{ weight }} kg</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Fitness Goal</span>
+            <span class="info-value">{{ goal }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Intensity</span>
+            <span class="info-value">
+              {% if intensity|lower == 'high' %}
+                <span class="badge-tag badge-high">High 🔥</span>
+              {% elif intensity|lower == 'medium' %}
+                <span class="badge-tag badge-medium">Medium ⚡</span>
+              {% else %}
+                <span class="badge-tag badge-low">Low 🌿</span>
+              {% endif %}
+            </span>
+          </div>
+        </div>
+
+        {% if nutrition_stats %}
+        <!-- Metabolic Estimates & Daily Targets -->
+        <div class="nutrition-stats-grid">
+          <div class="stat-pill">
+            <div class="stat-num">{{ nutrition_stats.calories }}</div>
+            <div class="stat-desc">Target Kcal/day</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-num">{{ nutrition_stats.protein_grams }}g</div>
+            <div class="stat-desc">Daily Protein</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-num">{{ nutrition_stats.carbs_grams }}g</div>
+            <div class="stat-desc">Daily Carbs</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-num">{{ nutrition_stats.water_liters }}L</div>
+            <div class="stat-desc">Hydration ({{ nutrition_stats.water_glasses }} glasses)</div>
+          </div>
+        </div>
+        {% endif %}
+      </section>
+
+      <!-- Workout Plan Section (PDF Pages 20-21) -->
+      <section style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 700; color: #1e293b;">
+            📅 7-Day Workout Routine
+          </h2>
+          <button onclick="window.print()" class="btn btn-secondary" style="width: auto; padding: 0.4rem 0.9rem; font-size: 0.85rem;">
+            🖨️ Print / Save PDF
+          </button>
+        </div>
+        <div class="plan-container">
+          <pre class="plan-pre">{{ workout_plan }}</pre>
+        </div>
+      </section>
+
+      <!-- Nutrition Tip Section (PDF Page 21) -->
+      <section class="tip-box">
+        <div class="tip-icon">💡</div>
+        <div>
+          <h3 class="tip-title">Nutrition & Recovery Tip (Gemini Flash)</h3>
+          <p class="tip-content">{{ nutrition_tip }}</p>
+        </div>
+      </section>
+
+      <!-- Share Your Feedback Section (PDF Page 22) -->
+      <section style="border-top: 1px solid #e2e8f0; padding-top: 2rem; margin-top: 1rem;">
+        <div style="text-align: center; margin-bottom: 1.25rem;">
+          <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.35rem; font-weight: 700; color: #1e293b; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <span>📝</span> Share Your Feedback
+          </h2>
+          <p style="color: #64748b; font-size: 0.9rem; margin-top: 0.25rem;">
+            Need adjustments? Ask to add cardio, include yoga, change intensity, or incorporate extra rest days.
+          </p>
+        </div>
+
+        <form id="feedbackForm" action="/submit-feedback" method="POST">
+          <div class="form-group">
+            <label for="feedback_user_id" class="form-label">Your Unique User ID</label>
+            <input 
+              type="number" 
+              id="feedback_user_id" 
+              name="user_id" 
+              class="form-control" 
+              value="{{ user_id }}" 
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="feedback" class="form-label">Your Feedback / Adjustments</label>
+            <textarea 
+              id="feedback" 
+              name="feedback" 
+              class="form-control" 
+              rows="3" 
+              placeholder="e.g. Include more cardio, add morning yoga on rest days, focus more on upper body..." 
+              required
+            ></textarea>
+          </div>
+
+          <button type="submit" id="feedbackBtn" class="btn">
+            <span id="fbIcon">🔄</span>
+            <span id="fbText">Submit Feedback & Update Plan</span>
+          </button>
+        </form>
+      </section>
+
+      <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <a href="/" class="btn btn-secondary">
+          ⬅️ Create Another Plan
+        </a>
+        <a href="/view-all-users" class="btn btn-secondary">
+          👥 View All Users Dashboard
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>FitBuddy AI &bull; Powered by Google Gemini 1.5 Pro &amp; Flash &bull; Built with FastAPI</p>
+  </footer>
+
+  <script>
+    const fbForm = document.getElementById('feedbackForm');
+    const fbBtn = document.getElementById('feedbackBtn');
+    const fbText = document.getElementById('fbText');
+    const fbIcon = document.getElementById('fbIcon');
+
+    fbForm.addEventListener('submit', function() {
+      fbText.textContent = 'Updating workout plan with Gemini AI...';
+      fbIcon.textContent = '⏳';
+      fbBtn.style.opacity = '0.85';
+      fbBtn.style.pointerEvents = 'none';
+    });
+  </script>
+</body>
+</html>
